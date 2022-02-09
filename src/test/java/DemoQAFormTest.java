@@ -1,7 +1,6 @@
 
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +26,8 @@ public class DemoQAFormTest {
     String state = "Rajasthan";
     String city = "Jaipur";
     File file = new File("src/test/resources/pik.png");
+
+    String tablePath = "//td[text()='%s']/following-sibling::td";
 
     @BeforeAll
     static void beforeAll() {
@@ -63,16 +64,15 @@ public class DemoQAFormTest {
         $("#submit").click();
 
         //проверка анкеты
-        $x("//td[text()='Student Name']/following-sibling::td").shouldHave(text(firstName + " " + lastName));
-        $x("//td[text()='Student Email']/following-sibling::td").shouldHave(text(email));
-        $x("//td[text()='Gender']/following-sibling::td").shouldHave(text(gender));
-        $x("//td[text()='Mobile']/following-sibling::td").shouldHave(text(phoneNumber));
-        $x("//td[text()='Date of Birth']/following-sibling::td").shouldHave(text(birthDay+" "+birthMonth+","+birthYear));
-        $x("//td[text()='Mobile']/following-sibling::td").shouldHave(text(phoneNumber));
-        $x("//td[text()='Subjects']/following-sibling::td").shouldHave(text(subject));
-        $x("//td[text()='Hobbies']/following-sibling::td").shouldHave(text(hobby));
-        $x("//td[text()='Picture']/following-sibling::td").shouldHave(text(file.getName()));
-        $x("//td[text()='Address']/following-sibling::td").shouldHave(text(address));
-        $x("//td[text()='State and City']/following-sibling::td").shouldHave(text(state+" "+city));
+        $x(String.format(tablePath, "Student Name")).shouldHave(text(firstName + " " + lastName));
+        $x(String.format(tablePath, "Student Email")).shouldHave(text(email));
+        $x(String.format(tablePath, "Gender")).shouldHave(text(gender));
+        $x(String.format(tablePath, "Mobile")).shouldHave(text(phoneNumber));
+        $x(String.format(tablePath, "Date of Birth")).shouldHave(text(birthDay + " " + birthMonth + "," + birthYear));
+        $x(String.format(tablePath, "Subjects")).shouldHave(text(subject));
+        $x(String.format(tablePath, "Hobbies")).shouldHave(text(hobby));
+        $x(String.format(tablePath, "Picture")).shouldHave(text(file.getName()));
+        $x(String.format(tablePath, "Address")).shouldHave(text(address));
+        $x(String.format(tablePath, "State and City")).shouldHave(text(state + " " + city));
     }
 }
