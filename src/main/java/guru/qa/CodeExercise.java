@@ -2,6 +2,17 @@ package guru.qa;
 
 public class CodeExercise {
 
+    public static void main(String[] args){
+        byteOverflowExercise();
+        shortOverflowExercise();
+        intOverflowExercise();
+        longOverflowExercise();
+        floatOverflowExercise();
+        doubleOverflowExercise();
+        operationTypeExercise();
+        printTrueStatementsExercise();
+    }
+
     public static void byteOverflowExercise() {
         byte a = Byte.MAX_VALUE;
         byte b = Byte.MIN_VALUE;
