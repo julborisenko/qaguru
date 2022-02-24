@@ -106,6 +106,7 @@ public class FormTestPage {
     }
 
     public FormTestPage submitForm() {
+        submitButton.scrollTo();
         submitButton.click();
         return this;
     }

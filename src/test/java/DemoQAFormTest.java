@@ -1,9 +1,18 @@
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pages.FormTestPage;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
+
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 
 public class DemoQAFormTest {
 
@@ -28,7 +37,29 @@ public class DemoQAFormTest {
     @BeforeAll
     static void beforeAll() {
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.browserSize = "1920x1080";
+        //Configuration.browserSize = "1920x1080";
+        Configuration.browserSize = "1159x964";
+    }
+
+    @CsvSource(value = {
+            "Eve|Polastri|Female|3246547654",
+            "Konstantin|Vasiliev|Male|8760945673"
+    }, delimiter = '|')
+    @ParameterizedTest(name = "Проверка отображения анкеты только с обязательными полями")
+    void requiredFillInFormTest(String firstName, String lastName, String gender, String phoneNumber) {
+        formTestPage.openPage();
+        formTestPage
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .selectGender(gender)
+                .setPhone(phoneNumber)
+                .submitForm();
+
+        formTestPage
+                .checkForm("Student Name", firstName + " " + lastName)
+                .checkForm("Student Email", email)
+                .checkForm("Gender", gender)
+                .checkForm("Mobile", phoneNumber);
     }
 
     @Test
