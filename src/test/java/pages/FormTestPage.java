@@ -1,14 +1,15 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.JavascriptExecutor;
 import pages.components.CalendarComponent;
 
 import java.io.File;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class FormTestPage {
 
@@ -30,11 +31,13 @@ public class FormTestPage {
             stateSelector = $("#state"),
             citySelector = $("#city"),
             submitButton = $("#submit"),
-            resultsTable = $(".table-responsive");
+            resultsTable = $(".table-responsive"),
+            adButton = $("#close-fixedban");
 
     // actions
     public void openPage() {
         open("/automation-practice-form");
+        zoom(0.7);
         pageTitle.shouldHave(text("Practice Form"));
         formHeader.shouldHave(text("Student Registration Form"));
     }
@@ -70,9 +73,9 @@ public class FormTestPage {
         return this;
     }
 
-    public FormTestPage setSubjects(String[] input) {
-        for (int i = 0; i < input.length; ++i) {
-            subjectsField.setValue(input[i]);
+    public FormTestPage setSubjects(List<String> input) {
+        for (int i = 0; i < input.size(); ++i) {
+            subjectsField.setValue(input.get(i));
             $("#react-select-2-option-0").click();
         }
         return this;
@@ -111,13 +114,18 @@ public class FormTestPage {
         return this;
     }
 
+    public FormTestPage closeAd(){
+        adButton.click();
+        return this;
+    }
+
     public FormTestPage checkForm(String fieldName, String value) {
         resultsTable.$(byText(fieldName))
                 .parent().shouldHave(text(value));
         return this;
     }
 
-    public FormTestPage checkForm(String fieldName, String[] value) {
+    public FormTestPage checkForm(String fieldName, List<String> value) {
         String joinedString = String.join(", ", value);
         resultsTable.$(byText(fieldName))
                 .parent().shouldHave(text(joinedString));

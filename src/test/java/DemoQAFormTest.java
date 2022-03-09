@@ -1,44 +1,25 @@
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import pages.FormTestPage;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class DemoQAFormTest {
 
     FormTestPage formTestPage = new FormTestPage();
 
-    String firstName = "Eve";
-    String lastName = "Polastri";
-    String email = "test@gmail.com";
-    String gender = "Female";
-    String phoneNumber = "3246547654";
-    String birthYear = "2002";
-    String birthMonth = "July";
-    String birthDay = "15";
-    String[] subjects = {"Biology", "Computer Science", "English"};
-    String hobby = "Reading";
-    String address = "39 Piscally St";
-    String state = "Rajasthan";
-    String city = "Jaipur";
     File file = new File("src/test/resources/pik.png");
-
 
     @BeforeAll
     static void beforeAll() {
         Configuration.baseUrl = "https://demoqa.com";
-        //Configuration.browserSize = "1920x1080";
-        Configuration.browserSize = "1159x964";
+        Configuration.browserSize = "1920x1080";
     }
 
     @CsvSource(value = {
@@ -49,6 +30,7 @@ public class DemoQAFormTest {
     void requiredFillInFormTest(String firstName, String lastName, String gender, String phoneNumber) {
         formTestPage.openPage();
         formTestPage
+                .closeAd()
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .selectGender(gender)
@@ -57,16 +39,24 @@ public class DemoQAFormTest {
 
         formTestPage
                 .checkForm("Student Name", firstName + " " + lastName)
-                .checkForm("Student Email", email)
                 .checkForm("Gender", gender)
                 .checkForm("Mobile", phoneNumber);
     }
 
-    @Test
-    void fillInFormTest() {
+    static Stream<Arguments> mixedArgumentsTestDataProvider() {
+        return Stream.of(
+                Arguments.of("Eve", "Polastri", "test@gmail.com", "Female", "3246547654", "2002", "July", "15", List.of("Biology", "Computer Science", "English"), "Reading", "39 Piscally St", "Rajasthan", "Jaipur"),
+                Arguments.of("Konstantin", "Vasiliev", "test02@mail.ru", "Male", "8760945673", "1997", "September", "21", List.of("Arts", "History", "Civics"), "Sports", "23 Rusanna St", "Haryana", "Karnal")
+        );
+    }
+
+    @MethodSource(value = "mixedArgumentsTestDataProvider")
+    @ParameterizedTest(name = "Проверка отображения анкеты cо всеми заполненными полями")
+    void fillInFormTest(String firstName, String lastName, String email, String gender, String phoneNumber, String birthYear, String birthMonth, String birthDay, List<String> subjects, String hobby, String address, String state, String city) {
         formTestPage.openPage();
         //заполнение анкеты
         formTestPage
+                .closeAd()
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setEmail(email)
