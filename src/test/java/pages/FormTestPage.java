@@ -32,14 +32,32 @@ public class FormTestPage {
             citySelector = $("#city"),
             submitButton = $("#submit"),
             resultsTable = $(".table-responsive"),
-            adButton = $("#close-fixedban");
+            adButton = $("#close-fixedban"),
+            slider = $(".range-slider.range-slider--primary"),
+            sliderValue = $("#sliderValue");
 
     // actions
-    public void openPage() {
+    public void openFormPage() {
         open("/automation-practice-form");
         zoom(0.7);
         pageTitle.shouldHave(text("Practice Form"));
         formHeader.shouldHave(text("Student Registration Form"));
+    }
+
+    public void openSliderPage() {
+        open("/slider");
+        zoom(0.7);
+        pageTitle.shouldHave(text("Slider"));
+    }
+
+    public FormTestPage setSliderValue(String input) {
+        slider.setValue(input);
+        return this;
+    }
+
+    public FormTestPage checkSliderValue(String input) {
+        sliderValue.getValue().equals(input);
+        return this;
     }
 
     public FormTestPage setFirstName(String input) {
@@ -114,7 +132,7 @@ public class FormTestPage {
         return this;
     }
 
-    public FormTestPage closeAd(){
+    public FormTestPage closeAd() {
         adButton.click();
         return this;
     }

@@ -1,5 +1,6 @@
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.provider.ValueSource;
 import pages.FormTestPage;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,13 +23,22 @@ public class DemoQAFormTest {
         Configuration.browserSize = "1920x1080";
     }
 
+    @ValueSource(strings = {"26", "39"})
+    @ParameterizedTest(name = "Проверка отображения значения слайдера")
+    void checkSliderTest(String testData) {
+        formTestPage.openSliderPage();
+        formTestPage
+                .setSliderValue(testData)
+                .checkSliderValue(testData);
+    }
+
     @CsvSource(value = {
             "Eve|Polastri|Female|3246547654",
             "Konstantin|Vasiliev|Male|8760945673"
     }, delimiter = '|')
     @ParameterizedTest(name = "Проверка отображения анкеты только с обязательными полями")
     void requiredFillInFormTest(String firstName, String lastName, String gender, String phoneNumber) {
-        formTestPage.openPage();
+        formTestPage.openFormPage();
         formTestPage
                 .closeAd()
                 .setFirstName(firstName)
@@ -53,7 +63,7 @@ public class DemoQAFormTest {
     @MethodSource(value = "mixedArgumentsTestDataProvider")
     @ParameterizedTest(name = "Проверка отображения анкеты cо всеми заполненными полями")
     void fillInFormTest(String firstName, String lastName, String email, String gender, String phoneNumber, String birthYear, String birthMonth, String birthDay, List<String> subjects, String hobby, String address, String state, String city) {
-        formTestPage.openPage();
+        formTestPage.openFormPage();
         //заполнение анкеты
         formTestPage
                 .closeAd()
