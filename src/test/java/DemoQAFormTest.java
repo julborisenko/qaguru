@@ -9,12 +9,12 @@ public class DemoQAFormTest {
 
     FormTestPage formTestPage = new FormTestPage();
 
-    String firstName = "Eve";
+    String firstName = "Evelyne";
     String lastName = "Polastri";
-    String email = "test@gmail.com";
+    String email = "testing@gmail.com";
     String gender = "Female";
     String phoneNumber = "3246547654";
-    String birthYear = "2002";
+    String birthYear = "1992";
     String birthMonth = "July";
     String birthDay = "15";
     String[] subjects = {"Biology", "Computer Science", "English"};
